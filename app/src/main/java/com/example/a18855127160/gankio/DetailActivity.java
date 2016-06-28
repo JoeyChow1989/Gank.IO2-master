@@ -33,18 +33,22 @@ import Net.GankUrl;
 /**
  * 显示文章的Activity
  */
-public class DetailActivity extends AppCompatActivity {
-   private WebView webView;
-   private NumberProgressBar progressBar;
+public class DetailActivity extends AppCompatActivity
+{
+    private WebView webView;
+    private NumberProgressBar progressBar;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         AllResult.Results meiziResults = (AllResult.Results) intent.getSerializableExtra("girls");
         final AllResult.Results dataResults = (AllResult.Results) intent.getSerializableExtra("articles");
 
         //设置Activity 切换动画
-        switch (dataResults.getType()){
+        switch (dataResults.getType())
+        {
             case GankUrl.FLAG_Expand:
                 getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
                 getWindow().setEnterTransition(new Fade());
@@ -52,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
             case GankUrl.FLAG_Recommend:
                 getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
                 getWindow().setEnterTransition(new Slide(Gravity.BOTTOM));
-                getWindow().setReenterTransition(new Slide(Gravity.START)) ;
+                getWindow().setReenterTransition(new Slide(Gravity.START));
                 break;
         }
         setContentView(R.layout.detail_layout);
@@ -76,8 +80,8 @@ public class DetailActivity extends AppCompatActivity {
                 .into(mImage);
 
         //设置内容webView 和加载进度条
-        webView= (WebView) findViewById(R.id.webView);
-        progressBar= (NumberProgressBar) findViewById(R.id.progressbar);
+        webView = (WebView) findViewById(R.id.webView);
+        progressBar = (NumberProgressBar) findViewById(R.id.progressbar);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new MyWebChromeClient());
         webView.setWebViewClient(new MyWebClient());
@@ -86,9 +90,11 @@ public class DetailActivity extends AppCompatActivity {
         webView.loadUrl(dataResults.getUrl());
 
         //设置返回导航按钮
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 onBackPressed();
                 webView.setVisibility(View.GONE);
 
@@ -96,41 +102,51 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         //点击FloatingActionButtoun  在浏览器内打开
-        FloatingActionButton button= (FloatingActionButton) findViewById(R.id.fab);
-        button.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.fab);
+        button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Uri content_url=  Uri.parse(dataResults.getUrl()) ;
-                Intent ie = new Intent(Intent.ACTION_VIEW,content_url);
+            public void onClick(View v)
+            {
+                Uri content_url = Uri.parse(dataResults.getUrl());
+                Intent ie = new Intent(Intent.ACTION_VIEW, content_url);
                 startActivity(ie);
             }
         });
     }
 
-    class MyWebChromeClient extends WebChromeClient {
+    class MyWebChromeClient extends WebChromeClient
+    {
         @Override
-        public void onProgressChanged(WebView view, int newProgress) {
+        public void onProgressChanged(WebView view, int newProgress)
+        {
             super.onProgressChanged(view, newProgress);
             progressBar.setProgress(newProgress);
-            if (newProgress == 100) {
+            if (newProgress == 100)
+            {
                 progressBar.setVisibility(View.GONE);
-            }
-            else {
+            } else
+            {
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
     }
-    private class MyWebClient extends WebViewClient {
+
+    private class MyWebClient extends WebViewClient
+    {
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        public boolean shouldOverrideUrlLoading(WebView view, String url)
+        {
             webView.loadUrl(url);
             return true;
         }
     }
 
     @Override
-    public void onBackPressed() {
-        if(webView.canGoBack()){
+    public void onBackPressed()
+    {
+        if (webView.canGoBack())
+        {
             webView.goBack();
             return;
         }
